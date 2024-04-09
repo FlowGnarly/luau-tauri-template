@@ -7,15 +7,13 @@ project generator: https://github.com/HighFlowey/create-luau-app
 
 ---
 # Setup
-Install all the dependencies with a package manager like pnpm or yarn (I used yarn), also make sure to have Lune installed on your system ([Lune Installation Guide](https://lune-org.github.io/docs/getting-started/1-installation))
+Install all the dependencies with a node package manager like pnpm or yarn, for both the main directory and the tauri directory
 
-## Examples
-```shell
-$ yarn install
-```
-```shell
-$ pnpm install
-```
+`yarn install` `pnpm install` `npm install`
+
+`cd tauri && yarn install && cd ..` `cd tauri && npm install && cd ..`
+
+And finally run `aftman install` to install the tools that will be used in the build process.
 
 ---
 # Scripts
