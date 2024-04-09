@@ -6,7 +6,7 @@
   "main": "./src/init.luau",
   "type": "module",
   "scripts": {
-    "prebuild": "node build.js",
+    "prebuild": "npmluau && node build.js",
     "build": "npm run prebuild && cd tauri && yarn tauri build",
     "dev": "npm run prebuild && cd tauri && yarn tauri dev"
   },
