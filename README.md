@@ -21,7 +21,7 @@ $ pnpm install
 # Scripts
 Use the `dev` script to run the app in dev mod, in dev mode app will reload when a luau file changes in the project
 
-Use the `make` script to make a windows installer
+Use the `build` script to make a windows installer
 
 ## Examples
 ```shell
