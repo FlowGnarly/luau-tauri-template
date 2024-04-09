@@ -1,0 +1,62 @@
+{
+  "build": {
+    "beforeDevCommand": "yarn dev",
+    "beforeBuildCommand": "yarn build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist",
+    "withGlobalTauri": true
+  },
+  "package": {
+    "productName": "lune-tauri",
+    "version": "0.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": true,
+        "sidecar": true,
+        "scope": [
+          {
+            "name": "run-lune-code",
+            "cmd": "lune",
+            "args": ["run", "src/init.luau"]
+          },
+          {
+            "name": "build",
+            "sidecar": true
+          }
+        ]
+      },
+      "http": {
+        "all": false,
+        "request": true,
+        "scope": ["http://localhost:3476/*"]
+      }
+    },
+    "windows": [
+      {
+        "title": "lune-tauri",
+        "width": 800,
+        "height": 600
+      }
+    ],
+    "security": {
+      "csp": null
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "lune.tauri.dev",
+      "resources": ["node_modules", ".luaurc"],
+      "externalBin": ["build"],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ]
+    }
+  }
+}

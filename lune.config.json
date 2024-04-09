@@ -1,0 +1,4 @@
+{
+  "$schema": "./lune.schema.json",
+  "lune-binray-platform": "-x86_64-pc-windows-msvc.exe"
+}

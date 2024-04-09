@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "lune-binray-platform": {
+      "type": "string",
+      "description": "Tauri will look for system-specific binaries following the pattern \"{-target-triple}{.system-extension}\".\nE.g. Tauri looks for:\n - \"my-binary-x86_64-pc-windows-msvc.exe\" for Windows - \"my-binary-x86_64-apple-darwin\" for macOS - \"my-binary-x86_64-unknown-linux-gnu\" for Linux\nso don't forget to provide binaries for all targeted platforms."
+    }
+  }
+}

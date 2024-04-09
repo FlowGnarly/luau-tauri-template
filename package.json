@@ -1,0 +1,17 @@
+{
+  "name": "lune-tauri",
+  "version": "1.0.0",
+  "author": "ashleyflow",
+  "license": "MIT",
+  "main": "./src/init.luau",
+  "type": "module",
+  "scripts": {
+    "prebuild": "node build.js",
+    "build": "npm run prebuild && cd tauri && yarn tauri build",
+    "dev": "npm run prebuild && cd tauri && yarn tauri dev"
+  },
+  "dependencies": {
+    "luau-electron-bindings": "^1.0.1",
+    "npmluau": "^0.1.1"
+  }
+}
