@@ -1,4 +1,9 @@
 {
+    "languageMode": "strict",
+    "lintErrors": true,
+    "lint": {
+        "*": true
+    },
     "aliases": {
         "lune": "~/.lune/.typedefs/0.8.2/",
         "pkg": "./node_modules/.luau-aliases/"
