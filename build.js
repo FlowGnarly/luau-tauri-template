@@ -40,6 +40,12 @@ fs.copyFileSync('.luaurc', "tauri/src-tauri/.luaurc")
 
 console.log("Copied .luaurc")
 
+if (fs.existsSync('tauri/src-tauri/node_modules/')) {
+    fs.rmSync('tauri/src-tauri/node_modules/', { recursive: true, force: true })
+}
+
+console.log("Cleared node modules")
+
 if (!fs.existsSync('tauri/src-tauri/node_modules/')) {
     fs.mkdirSync('tauri/src-tauri/node_modules/')
 }
@@ -57,3 +63,5 @@ fs.readdirSync('node_modules/.luau-aliases').forEach((file) => {
     fs.cpSync(dir, 'tauri/src-tauri/node_modules/' + module, { recursive: true })
     console.log('Copied', module)
 })
+
+console.log("Copied node modules")
