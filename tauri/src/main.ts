@@ -1,7 +1,10 @@
 import { Child, Command } from "@tauri-apps/api/shell";
 import { listeners } from "./ipc";
 import "./methods";
+import { exit } from "@tauri-apps/api/process";
+import { elements } from "./methods";
 
+const appWindow = (window as any).__TAURI__.window;
 let isDevMode = (import.meta as any).env.TAURI_DEBUG;
 let luneHandle: Child;
 
@@ -64,12 +67,33 @@ bridge.stderr.on("data", (data) => {
   console.log("error:", data);
 });
 
-window.onbeforeunload = async () => {
-  fetch("http://localhost:3476/kill", {
-    method: "POST",
-  }).catch((err) => console.error(err));
+function kill() {
+  return new Promise<undefined>(async (res) => {
+    await fetch("http://localhost:3476/kill", {
+      method: "POST",
+    }).catch((err) => console.error(err));
 
-  if (luneHandle) await luneHandle.kill();
+    if (luneHandle) await luneHandle.kill();
+    res(undefined);
+  });
+}
+
+appWindow.getCurrent().listen("tauri://close-requested", async () => {
+  kill();
+  await exit(0);
+  appWindow.getCurrent().close();
+});
+
+window.onbeforeunload = async () => {
+  Object.values(elements).forEach((element) => {
+    if (element !== document.body) element.remove();
+  });
+
+  let header = document.createElement("h1");
+  header.innerHTML = "Don't cancel the reload prompt";
+  document.body.appendChild(header);
+
+  kill();
 };
 
 window.addEventListener("DOMContentLoaded", async () => {

@@ -1,6 +1,6 @@
 import * as ipc from "./ipc";
 
-let elements: {
+export let elements: {
   [id: number]: Element;
 } = {};
 
