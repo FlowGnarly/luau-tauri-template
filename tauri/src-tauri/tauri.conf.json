@@ -23,7 +23,7 @@
             "args": ["run", "src/init.luau"]
           },
           {
-            "name": "build",
+            "name": "bundled",
             "sidecar": true
           }
         ]
@@ -32,6 +32,9 @@
         "all": false,
         "request": true,
         "scope": ["http://localhost:3476/*"]
+      },
+      "window": {
+        "close": true
       }
     },
     "windows": [
@@ -49,7 +52,7 @@
       "targets": "all",
       "identifier": "lune.tauri.dev",
       "resources": ["node_modules", ".luaurc"],
-      "externalBin": ["build"],
+      "externalBin": ["bundled"],
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",

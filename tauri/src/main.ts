@@ -25,10 +25,10 @@ interface LuneInvokeData {
 type LuneData = LuneMethodData | LuneInvokeData;
 
 const bridge = isDevMode
-  ? new Command("run-lune-code", ["run", "src/init.luau"], {
+  ? new Command("run-lune-code", ["run", "dist/bundled.luau"], {
       cwd: "../../",
     })
-  : Command.sidecar("build", []);
+  : Command.sidecar("bundled", []);
 
 // console.log(debugMode);
 

@@ -20,7 +20,7 @@ if (bundlingProcess.error) {
 console.log("Bundled luau codebase")
 
 config["lune-binray-platform"].forEach(target => {
-    let buildProcess = child_process.spawnSync("lune", ["build", "dist/bundled.luau", "-o", "tauri/src-tauri/build" + target], {
+    let buildProcess = child_process.spawnSync("lune", ["build", "dist/bundled.luau", "-o", "tauri/src-tauri/bundled" + target], {
         stdio: "inherit"
     })
 
