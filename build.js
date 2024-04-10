@@ -19,18 +19,20 @@ if (bundlingProcess.error) {
 
 console.log("Bundled luau codebase")
 
-let buildProcess = child_process.spawnSync("lune", ["build", "dist/bundled.luau", "-o", "tauri/src-tauri/build" + config["lune-binray-platform"]], {
-    stdio: "inherit"
-})
+config["lune-binray-platform"].forEach(target => {
+    let buildProcess = child_process.spawnSync("lune", ["build", "dist/bundled.luau", "-o", "tauri/src-tauri/build" + target], {
+        stdio: "inherit"
+    })
 
-if (buildProcess.error) {
-    console.error('Error occurred:', buildProcess.error);
-    console.error('Try installing lune on your system if you havent already.')
-    exit(exitCode)
-} else if (buildProcess.status !== 0) {
-    console.error('Command exited with non-zero status:', buildProcess.status);
-    exit(exitCode)
-}
+    if (buildProcess.error) {
+        console.error('Error occurred:', buildProcess.error);
+        console.error('Try installing lune on your system if you havent already.')
+        exit(exitCode)
+    } else if (buildProcess.status !== 0) {
+        console.error('Command exited with non-zero status:', buildProcess.status);
+        exit(exitCode)
+    }
+})
 
 console.log("Built lune binary")
 
