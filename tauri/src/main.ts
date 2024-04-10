@@ -1,8 +1,10 @@
 import { listeners } from "./ipc";
 import { listen } from "@tauri-apps/api/event";
 import { fetch } from "@tauri-apps/api/http";
+import { invoke } from "@tauri-apps/api";
 import "./methods";
 
+export const luauServerPort = await invoke<number>("get_luau_server_port");
 const appWindow = (window as any).__TAURI__.window;
 
 interface LuneMethodData {
@@ -55,13 +57,13 @@ listen("message", (e) => {
 });
 
 function kill() {
-  fetch("http://localhost:3476/kill", {
+  fetch(`http://localhost:${luauServerPort}/kill`, {
     method: "POST",
   }).catch((err) => console.error(err));
 }
 
 function load() {
-  fetch("http://localhost:3476/load", {
+  fetch(`http://localhost:${luauServerPort}/load`, {
     method: "POST",
   }).catch((err) => console.error(err));
 }
@@ -71,4 +73,4 @@ appWindow.getCurrent().listen("tauri://close-requested", async () => {
   appWindow.getCurrent().close();
 });
 
-window.addEventListener("DOMContentLoaded", load);
+load();
