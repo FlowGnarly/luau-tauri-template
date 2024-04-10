@@ -10,12 +10,16 @@ export function on(channel: string, callback: (_: null, info: any) => void) {
   listeners[channel].push(callback);
 }
 
-export async function sendToLune(channel: string, info: any) {
+export async function sendToLune(
+  channel: string,
+  info: any,
+  dontStringify?: boolean
+) {
   fetch(`http://localhost:${await getLuauServerPort()}/channel`, {
     method: "POST",
     headers: {
       channel,
-      value: JSON.stringify(info),
+      value: dontStringify ? info : JSON.stringify(info),
     },
   }).catch((err) => console.error(err));
 }

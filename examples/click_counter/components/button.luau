@@ -3,7 +3,7 @@ local app = bindings.app
 local document = app.document
 
 type Props = {
-	on_click_callback: () -> (),
+	on_click_callback: (event: bindings.Event) -> (),
 	parent: bindings.HTMLElement?,
 }
 

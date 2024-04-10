@@ -1,4 +1,5 @@
 import * as ipc from "./ipc";
+import { serializeEvent } from "./serialize";
 
 export let elements: {
   [id: number]: Element;
@@ -121,9 +122,9 @@ ipc.on(
 
     events[info.id][info.event].push(info.eventId);
 
-    (element as any)[info.event] = function () {
+    (element as any)[info.event] = function (e: unknown) {
       events[info.id][info.event].forEach((eventId) => {
-        ipc.sendToLune("event:" + eventId, {});
+        ipc.sendToLune("event:" + eventId, serializeEvent(e), true);
       });
     };
   }

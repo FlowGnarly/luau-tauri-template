@@ -23,7 +23,7 @@ return function(body: bindings.HTMLElement)
 
 	require("./components/button")({
 		parent = body,
-		on_click_callback = function()
+		on_click_callback = function(e: bindings.Event)
 			clicks += 1
 			update_counter()
 		end,
