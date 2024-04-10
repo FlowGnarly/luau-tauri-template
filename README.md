@@ -48,3 +48,5 @@ There is no hot-reloading for luau code atm, I'll try to set that up soon, for n
 # Roadmap
 
 Hot-reload for luau codebase
+
+Send more info with events
