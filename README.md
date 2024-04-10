@@ -39,7 +39,7 @@ Using `require("@pkg/luau-electron-bindings").app` you can now create elements i
 # Known issues
 
 ### 1.
-On windows, in the development version (e.g. the one you run with `yarn run dev`) when you forcefully shutdown the app, by either pressing alt+f4 or terminating the process somehow, bundled.exe which contains the luau code will not shutdown.
+On windows, in the development version (e.g. the one you run with `yarn run dev`) when you forcefully shutdown the app, by either pressing alt+f4 or terminating the process somehow, bundled.exe which contains the luau code will not shutdown, which will result in the building process to fail.
 
 ### 2.
 There is no hot-reloading for luau code atm, I'll try to set that up soon, for now if you want to visualize the changes you make to luau files, you have to rerun the app (e.g. by running `yarn run dev`)
