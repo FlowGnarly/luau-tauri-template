@@ -4,7 +4,9 @@ import { fetch } from "@tauri-apps/api/http";
 import { invoke } from "@tauri-apps/api";
 import "./methods";
 
-export const luauServerPort = await invoke<number>("get_luau_server_port");
+export const getLuauServerPort = async (): Promise<number> => {
+  return await invoke<number>("get_luau_server_port");
+};
 const appWindow = (window as any).__TAURI__.window;
 
 interface LuneMethodData {
@@ -56,14 +58,14 @@ listen("message", (e) => {
   }
 });
 
-function kill() {
-  fetch(`http://localhost:${luauServerPort}/kill`, {
+async function kill() {
+  fetch(`http://localhost:${await getLuauServerPort()}/kill`, {
     method: "POST",
   }).catch((err) => console.error(err));
 }
 
-function load() {
-  fetch(`http://localhost:${luauServerPort}/load`, {
+async function load() {
+  fetch(`http://localhost:${await getLuauServerPort()}/load`, {
     method: "POST",
   }).catch((err) => console.error(err));
 }

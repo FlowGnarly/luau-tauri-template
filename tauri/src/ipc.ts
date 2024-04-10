@@ -1,5 +1,5 @@
 import { fetch } from "@tauri-apps/api/http";
-import { luauServerPort } from "./main";
+import { getLuauServerPort } from "./main";
 
 export let listeners: {
   [channel: string]: ((_: null, info: any) => void)[];
@@ -10,8 +10,8 @@ export function on(channel: string, callback: (_: null, info: any) => void) {
   listeners[channel].push(callback);
 }
 
-export function sendToLune(channel: string, info: any) {
-  fetch(`http://localhost:${luauServerPort}/channel`, {
+export async function sendToLune(channel: string, info: any) {
+  fetch(`http://localhost:${await getLuauServerPort()}/channel`, {
     method: "POST",
     headers: {
       channel,
