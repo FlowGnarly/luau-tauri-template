@@ -49,6 +49,11 @@ fs.cpSync('node_modules/.luau-aliases', 'tauri/src-tauri/node_modules/.luau-alia
 fs.readdirSync('node_modules/.luau-aliases').forEach((file) => {
     let module = path.parse(file).name
     let dir = 'node_modules/' + module
+
+    if (fs.lstatSync(dir).isSymbolicLink()) {
+        dir = fs.realpathSync(dir);
+    }
+
     fs.cpSync(dir, 'tauri/src-tauri/node_modules/' + module, { recursive: true })
     console.log('Copied', module)
 })
