@@ -36,7 +36,7 @@
       "http": {
         "all": false,
         "request": true,
-        "scope": ["http://localhost:3476/*"]
+        "scope": ["http://**"]
       }
     },
     "windows": [

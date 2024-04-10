@@ -8,6 +8,9 @@ use tauri::api::process::CommandChild;
 use tauri::api::process::CommandEvent;
 use tauri::{Manager, RunEvent};
 
+use get_port::tcp::TcpPort;
+use get_port::{Ops, Range};
+
 #[derive(Default)]
 struct Backend(Option<CommandChild>);
 
@@ -22,10 +25,11 @@ fn get_luau_server_port(luau_server: State<LuauServer>) -> u16 {
 
 fn main() {
     let mut backend = Backend::default();
+    let tcp_port = TcpPort::in_range("127.0.0.1", Range {min: 6000, max: 7000 }).unwrap();
 
     tauri::Builder::default()
         .manage(LuauServer {
-            port: Mutex::new(Some(3476))
+            port: Mutex::new(Some(tcp_port))
         })
         .invoke_handler(tauri::generate_handler![get_luau_server_port])
         .build(tauri::generate_context!())
