@@ -11,7 +11,7 @@
     "dev": "npm run prebuild && cd tauri && yarn tauri dev"
   },
   "dependencies": {
-    "luau-electron-bindings": "^1.0.1",
+    "luau-electron-bindings": "^1.0.3",
     "npmluau": "^0.1.1"
   }
 }
