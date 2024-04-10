@@ -13,6 +13,10 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "window": {
+        "all": false,
+        "close": true
+      },
       "shell": {
         "all": true,
         "sidecar": true,
@@ -24,7 +28,8 @@
           },
           {
             "name": "bundled",
-            "sidecar": true
+            "sidecar": true,
+            "args": [{ "validator": "\\d{4,5}" }]
           }
         ]
       },
@@ -32,15 +37,6 @@
         "all": false,
         "request": true,
         "scope": ["http://localhost:3476/*"]
-      },
-      "window": {
-        "close": true
-      },
-      "process": {
-        "all": false,
-        "exit": true,
-        "relaunch": false,
-        "relaunchDangerousAllowSymlinkMacos": false
       }
     },
     "windows": [
