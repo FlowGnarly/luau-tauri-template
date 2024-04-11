@@ -64,7 +64,9 @@ fn run_lune(app_handle: AppHandle) {
         if let Some(ref mut stdout) = child.stdout.take() {
             let reader = BufReader::new(stdout);
             for line_result in reader.lines() {
-                if line_result.is_err() { continue; }
+                if line_result.is_err() {
+                    continue;
+                }
                 let line = line_result.unwrap();
                 process_lune_command(line, window.clone());
             }
@@ -73,7 +75,6 @@ fn run_lune(app_handle: AppHandle) {
 }
 
 fn main() {
-    let mut backend = Backend::default();
     let tcp_port = TcpPort::in_range(
         "127.0.0.1",
         Range {
@@ -88,41 +89,43 @@ fn main() {
             port: Mutex::new(Some(tcp_port)),
         })
         .invoke_handler(tauri::generate_handler![get_luau_server_port, run_lune])
+        .setup(move |app| {
+            let app_handle = &app.app_handle();
+            let window = app_handle.get_window("main").unwrap();
+
+            if cfg!(debug_assertions) {
+                run_lune(app_handle.clone());
+            } else {
+                let luau_server = app_handle.state::<LuauServer>();
+                let port: u16 = luau_server.port.lock().unwrap().unwrap();
+
+                let (mut rx, _child) = Command::new_sidecar("bundled")
+                    .expect("failed to run lune binary")
+                    .args([&port.to_string()])
+                    .spawn()
+                    .expect("failed to spawn sidecar");
+
+                tauri::async_runtime::spawn(async move {
+                    // read stdout
+                    while let Some(event) = rx.recv().await {
+                        if let CommandEvent::Stdout(line) = event {
+                            process_lune_command(line, window.clone());
+                        } else if let CommandEvent::Stderr(line) = event {
+                            println!("{:?}", line);
+                        }
+                    }
+                });
+            }
+
+            Ok(())
+        })
         .build(tauri::generate_context!())
         .expect("error while running tauri application")
-        .run(move |app_handle, event| match event {
-            RunEvent::Ready => {
-                let window = app_handle.get_window("main").unwrap();
-
-                if !cfg!(debug_assertions) {
-                    let luau_server = app_handle.state::<LuauServer>();
-                    let port: u16 = luau_server.port.lock().unwrap().unwrap();
-
-                    let (mut rx, child) = Command::new_sidecar("bundled")
-                        .expect("failed to run lune binary")
-                        .args([&port.to_string()])
-                        .spawn()
-                        .expect("failed to spawn sidecar");
-
-                    tauri::async_runtime::spawn(async move {
-                        // read stdout
-                        while let Some(event) = rx.recv().await {
-                            if let CommandEvent::Stdout(line) = event {
-                                process_lune_command(line, window.clone());
-                            } else if let CommandEvent::Stderr(line) = event {
-                                println!("{:?}", line);
-                            }
-                        }
-                    });
-
-                    _ = backend.0.insert(child);
-                }
-            }
+        .run(move |_app_handle, event| match event {
             RunEvent::Exit => {
-                if let Some(child) = backend.0.take() {
-                    child.kill().expect("Failed to shutdown lune.");
-                    println!("Lune gracefully shutdown.")
-                }
+                let request =
+                    "http://localhost:".to_owned() + tcp_port.to_string().as_str() + "/kill";
+                reqwest::blocking::get(request).unwrap();
             }
             _ => {}
         });
