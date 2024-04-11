@@ -22,9 +22,13 @@
         "sidecar": true,
         "scope": [
           {
-            "name": "run-lune-code",
+            "name": "lune",
             "cmd": "lune",
-            "args": ["run", "src/init.luau"]
+            "args": [
+              "run",
+              { "validator": ".*\\.luau" },
+              { "validator": "\\d{4,5}" }
+            ]
           },
           {
             "name": "bundled",

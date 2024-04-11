@@ -1,10 +1,6 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::io::BufRead;
-use std::io::BufReader;
-use std::process::Command as StdCommand;
-use std::process::Stdio;
 use std::sync::Mutex;
 use tauri::api::process::Command;
 use tauri::api::process::CommandChild;
@@ -53,22 +49,18 @@ fn run_lune(app_handle: AppHandle) {
     let port: u16 = luau_server.port.lock().unwrap().unwrap();
 
     tauri::async_runtime::spawn(async move {
-        let mut child = StdCommand::new("lune")
-            .arg("run")
-            .arg("../../src/init.luau")
-            .arg(&port.to_string())
-            .stdout(Stdio::piped())
+        println!("{:?}", ["run", "../../src/init.luau", &port.to_string()]);
+        let (mut rx, _child) = Command::new("lune")
+            .args(["run", "../../src/init.luau", &port.to_string()])
             .spawn()
             .expect("Failed to run lune, install it on your system if you haven't already.");
 
-        if let Some(ref mut stdout) = child.stdout.take() {
-            let reader = BufReader::new(stdout);
-            for line_result in reader.lines() {
-                if line_result.is_err() {
-                    continue;
-                }
-                let line = line_result.unwrap();
+        // read stdout
+        while let Some(event) = rx.recv().await {
+            if let CommandEvent::Stdout(line) = event {
                 process_lune_command(line, window.clone());
+            } else if let CommandEvent::Stderr(line) = event {
+                println!("{:?}", line);
             }
         }
     });
@@ -125,7 +117,8 @@ fn main() {
             RunEvent::Exit => {
                 let request =
                     "http://localhost:".to_owned() + tcp_port.to_string().as_str() + "/kill";
-                reqwest::blocking::get(request).unwrap();
+
+                println!("sent kill request to lune: {:?}", reqwest::blocking::get(request).is_ok());
             }
             _ => {}
         });
