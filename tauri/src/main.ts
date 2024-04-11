@@ -7,7 +7,9 @@ import "./methods";
 export const getLuauServerPort = async (): Promise<number> => {
   return await invoke<number>("get_luau_server_port");
 };
+
 const appWindow = (window as any).__TAURI__.window;
+const devMode = (import.meta as any).env.TAURI_DEBUG;
 
 interface LuneMethodData {
   type: "Method";
@@ -59,16 +61,25 @@ listen("message", (e) => {
 });
 
 async function kill() {
-  fetch(`http://localhost:${await getLuauServerPort()}/kill`, {
+  return fetch(`http://localhost:${await getLuauServerPort()}/kill`, {
     method: "POST",
   }).catch((err) => console.error(err));
 }
 
 async function load() {
+  if (devMode) await kill();
+  await invoke("run_lune");
+
   fetch(`http://localhost:${await getLuauServerPort()}/load`, {
     method: "POST",
   }).catch((err) => console.error(err));
 }
+
+setInterval(async () => {
+  fetch(`http://localhost:${await getLuauServerPort()}/keep_alive`, {
+    method: "POST",
+  }).catch((err) => console.error(err));
+}, 10000);
 
 appWindow.getCurrent().listen("tauri://close-requested", async () => {
   kill();
