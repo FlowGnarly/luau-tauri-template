@@ -9,6 +9,7 @@
         "@utility": "./bindings"
       }
     },
-    "excludes": ["@lune/**", "@pkg/**"]
+    "excludes": ["@lune/**", "@pkg/**"],
+    "rules": ["rename_variables", "remove_comments", "remove_types"]
   }
 }
