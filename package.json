@@ -8,10 +8,13 @@
   "scripts": {
     "prebuild": "npmluau && node build.js",
     "build": "npm run prebuild && cd tauri && yarn tauri build",
-    "dev": "npm run prebuild && cd tauri && yarn tauri dev"
+    "dev": "npm run prebuild && cd tauri && yarn tauri dev",
+    "dev:watch": "node dev.js"
   },
   "dependencies": {
-    "luau-electron-bindings": "^1.0.4",
+    "luau-electron-bindings": "^1.0.4"
+  },
+  "devDependencies": {
     "npmluau": "^0.1.1"
   }
 }
