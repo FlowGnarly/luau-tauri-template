@@ -1,9 +1,5 @@
-# Lune Tauri
-this template uses the [electron-lune-bindings](https://www.npmjs.com/package/electron-lune-bindings) package to connect lune to javascript
-
----
 # CREATE-LUAU-APP
-project generator: https://github.com/HighFlowey/create-luau-app
+use the project generator: https://github.com/HighFlowey/create-luau-app
 
 ---
 # Setup
