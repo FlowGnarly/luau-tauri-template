@@ -1,6 +1,6 @@
 {
   "name": "lune-tauri",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "ashleyflow",
   "license": "MIT",
   "main": "./src/init.luau",
