@@ -1,16 +1,13 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use get_port::Range;
+use get_port::{tcp::TcpPort, Ops};
 use std::sync::Mutex;
-use tauri::api::process::Command;
-use tauri::api::process::CommandChild;
-use tauri::api::process::CommandEvent;
+use tauri::api::process::{Command, CommandEvent};
 use tauri::AppHandle;
 use tauri::State;
 use tauri::{Manager, RunEvent};
-
-use get_port::tcp::TcpPort;
-use get_port::{Ops, Range};
 
 struct LuauServer {
     port: Mutex<Option<u16>>,
