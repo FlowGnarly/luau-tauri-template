@@ -12,9 +12,6 @@ use tauri::{Manager, RunEvent};
 use get_port::tcp::TcpPort;
 use get_port::{Ops, Range};
 
-#[derive(Default)]
-struct Backend(Option<CommandChild>);
-
 struct LuauServer {
     port: Mutex<Option<u16>>,
 }
@@ -118,7 +115,10 @@ fn main() {
                 let request =
                     "http://localhost:".to_owned() + tcp_port.to_string().as_str() + "/kill";
 
-                println!("sent kill request to lune: {:?}", reqwest::blocking::get(request).is_ok());
+                println!(
+                    "sent kill request to lune: {:?}",
+                    reqwest::blocking::get(request).is_ok()
+                );
             }
             _ => {}
         });
